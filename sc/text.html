@@ -1,0 +1,122 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="http://oss.sheetjs.com/js-xlsx/xlsx.full.min.js"></script>
+</head>
+<body>
+
+
+	<body>
+	    <div id="drop">Drop an XLSX / XLSM / XLSB / ODS / XLS / XML file here to see sheet data</div>
+	    <p><input type="file" name="xlfile" id="xlf" /> ... or click here to select a file</p>
+	</body>
+
+
+	<script>
+		
+
+		function addLis() {
+		    var xlf = document.getElementById('xlf');
+		    var drop = document.getElementById('drop');
+		    drop.addEventListener("dragenter", handleDragover, false);
+		    drop.addEventListener("dragover", handleDragover, false);
+		    drop.addEventListener("drop", onDropDown, false);
+		    if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+		}
+
+		addLis();
+
+		function handleDragover(e) {
+		    e.stopPropagation();
+		    e.preventDefault();
+		    e.dataTransfer.dropEffect = 'copy';
+		}
+
+		function onDropDown(e) {
+		    e.stopPropagation();
+		    e.preventDefault();
+		    var files = e.dataTransfer.files;
+		    var f = files[0];
+		    readFile(f);
+		}
+
+		function handleFile(e) {
+		    var files = e.target.files;
+		    var f = files[0];
+		    readFile(f);
+		}
+
+		function readFile(file) {
+
+		    var name = file.name;
+		    var reader = new FileReader();
+		    reader.onload = function (e) {
+		        var data = e.target.result;
+		        var wb = XLSX.read(data, { type: "binary" });
+		        console.log(wb.Strings[0]);
+		        console.log(wb.Strings);
+		        console.log(wb);
+		    };
+		    reader.readAsBinaryString(file);
+		}
+	</script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="http://oss.sheetjs.com/js-xlsx/xlsx.full.min.js"></script>
+    </head>
+
+    <body>
+        <input type="file"onchange="importf(this)" />
+        <div id="demo"></div>
+        <script>
+            /*
+            FileReader共有4种读取方法：
+            1.readAsArrayBuffer(file)：将文件读取为ArrayBuffer。
+            2.readAsBinaryString(file)：将文件读取为二进制字符串
+            3.readAsDataURL(file)：将文件读取为Data URL
+            4.readAsText(file, [encoding])：将文件读取为文本，encoding缺省值为'UTF-8'
+                         */
+            var wb;//读取完成的数据
+
+            function importf(obj) {//导入
+                if(!obj.files) {
+                    return;
+                }
+                var f = obj.files[0];
+                console.log(f);
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var data = e.target.result;
+                    wb = XLSX.read(data, {
+                            type: 'binary'
+                    });
+                    console.log(wb.Sheets["Sheet1"]);
+                    console.log(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
+                    console.log(XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]]));
+                    console.log(XLSX.utils.sheet_to_formulae(wb.Sheets[wb.SheetNames[0]]));
+                    //wb.SheetNames[0]是获取Sheets中第一个Sheet的名字
+                    //wb.Sheets[Sheet名]获取第一个Sheet的数据
+                    document.getElementById("demo").innerHTML= JSON.stringify( XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]) );
+                };
+                console.log(f);
+                reader.readAsBinaryString(f);
+            }
+
+        </script>
+    </body>
+
+</html>
+
+
+<!-- 作者：关爱单身狗成长协会
+链接：http://www.jianshu.com/p/74d405940305
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 -->

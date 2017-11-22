@@ -25,7 +25,7 @@
               </template>
               <el-menu-item-group>
                 <el-menu-item index="/student/info">档案</el-menu-item>
-                <el-menu-item index="/student/analy">成绩</el-menu-item>
+                <el-menu-item index="/student/analy">统计</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
             <el-submenu index="/course">

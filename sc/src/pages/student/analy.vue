@@ -4,14 +4,16 @@
 			<el-col :span = "24">
 				<el-tabs v-model="activeName" @tab-click="handleClick">
 			    <el-tab-pane label="人数统计" name="first">
-			    	<div ref="main" style="width: 600px;height:400px;margin: 0 auto;">
-			    		
-			    	</div>
+			    	<el-col :span="12">
+			    		<div ref="main" style="width: 500px;height:400px;margin: 0 auto;"></div>
+			    	</el-col>
+			    	<el-col :span="12">
+			    		<div ref="main1" style="width: 500px;height:400px;margin: 0 auto;"></div>
+			    	</el-col>
+			    	
 			    </el-tab-pane>
 			    <el-tab-pane label="性别统计" name="second">
-			    	<div ref="main1" style="width: 600px;height:400px;margin: 0 auto;">
-			    		
-			    	</div>
+			    	
 			    </el-tab-pane>
 			    <el-tab-pane label="成绩统计" name="third">
 			    	
@@ -31,19 +33,19 @@
 		name: 'StudentAnaly',
 		data(){
 			return {
-				activeName: 'first'
+				activeName: ''
 			}
 		},
 		computed: {
 			...mapGetters(['studentsNum','studentsGender'])
 		},
-		mounted(){
+		created(){
 			this.analyStudentNum();
 			this.analyStudentGender();
+			this.activeName = "first";
 		},
 		methods: {
 			handleClick(tab,event){
-				console.log(event.currentTarget.textContent);
 				var vm = this;
 				// 初始化echarts实例
 				var myChart = echarts.init(this.$refs.main);
@@ -71,6 +73,10 @@
         	title: {
               text: '性别比例'
           },
+          tooltip: {
+			        trigger: 'item',
+			        formatter: "{a} <br/>{b} : {c} ({d}%)"
+			    },
           series : [
 			        {
 			            name: '性别比例',
@@ -80,13 +86,11 @@
 			        }
 			    ]
         }
-
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
         myChart1.setOption(option1);
 			},
 			...mapActions(['analyStudentNum','analyStudentGender'])
-			
 		}
 	});
 </script>
